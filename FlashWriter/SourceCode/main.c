@@ -2,7 +2,8 @@
 	SimpleROM Flash ROM programmer
 	Copyright 2021 @V9938
 	
-	V1.0		1st version
+	V1.0	2021/07/24	1st version
+	V1.1	2022/02/22	Added support for writing to Page3.
 */
 
 #include <stdio.h>
@@ -10,8 +11,8 @@
 #include <msx.h>
 #include <sys/ioctl.h>
 
-#define VERSION "V1.0"
-#define DATE "2021/07"
+#define VERSION "V1.1"
+#define DATE "2022/02"
 
 #define BUF_SIZE 128
 
@@ -67,9 +68,92 @@ busyWait:
 	cp	(hl)			;Check INTCNT
 	jr nz,busyWait		;Wait Loop
 	ret
+sltpush: 
+	db		00
+extpush: 
+	db		00
+sltmask: 
+	db		00
+extmask:
+	db		00
 #endasm
 }
+void writeSimpleROMpage3(unsigned char *Address,unsigned char data)
+{
+#asm
+	ld ix,2
+	add ix, sp
+	ld h, (ix+3)		;address_h
+	ld l, (ix+2)		;address_L
+	ld e, (ix)			;data
+	push de
+	push hl
+// 
+	in a,(0a8h)			;backup PSL
+	ld (sltpush),a
+	ld a,(0ffffh)
+	cpl
+	ld (extpush),a
+	
+    ld a,(_SelectSlot)	;Slot Number
+	sla a
+	sla a
+	sla a
+	sla a
+	ld b,a
+	and 11000000b
+	ld c,a				;ext mask
+	ld a,b
+	sla a
+	sla a
+	ld b,a				;slt mask
+	ld a,(sltpush)
+	and 00111111B
+	or b
+	ld (sltmask),a
 
+	ld a,(extpush)
+	and 00111111B
+	or c
+	ld (extmask),a
+
+;
+; Flash Byte-Program
+; aa-55-a0
+
+	call	serupCmd
+    ld a,(_SelectSlot)	;Slot Number
+	ld e,0a0h			;
+    ld hl,05555h		;Flash Address 2nd 0x5555
+    call 0014h			;call WRSLT
+
+	pop hl
+	pop de
+	di
+	ld a,(sltmask)
+	out (0a8h),a
+	ld a,(_SelectSlot)
+	and 080h
+	jr z,datawr
+	ld a,(extmask)
+	ld (0ffffh),a
+datawr:
+	ld (hl),e
+datawrWait:
+	ld a,(hl)
+	cp e					; Verify check
+;for test
+	jr nz,datawrWait			; Wait Byte-Program Time
+	
+	ld a,(extpush)
+	ld (0ffffh),a
+	ld a,(sltpush)
+	out (0a8h),a
+
+	ei
+	ret
+#endasm
+}
 void writeSimpleROM(unsigned char *Address,unsigned char data)
 {
 #asm
@@ -178,6 +262,8 @@ int main(int argc,char *argv[])
 	unsigned int  ReadPt,WriteMax;
 	unsigned char WriteData;
 	int i;
+	unsigned char SkipFlag;
+	unsigned char EndFlag;
 	
 	printf("Simple Cartridge Writer %s\n",VERSION);
 	printf("Copyrigth %s @v9938\n\n",DATE);
@@ -261,7 +347,8 @@ int main(int argc,char *argv[])
 	//Flash Write
 	printf("\nStart address : 0x%04x",addressWrite);
 	printf("\n");
-	
+
+	EndFlag = 0;
 	while (1){
 
 		fread(ReadData,sizeof ReadData, 1, fp);		//Read Buffer
@@ -274,15 +361,24 @@ int main(int argc,char *argv[])
 		}
 
 		//Parameter Check
-		if (addressWrite >= 0xC000){				// 4000-Bfffh Write finsh?
-			printf("\nROM size is FULL.");			// Ummm.ROM is FULL
+		if (EndFlag == 1){				// 4000-Bfffh Write finsh?
 			break;									//
 		}else{
 //			printf("\x1e\x0dFlash Write ... 0x%04x\n",addressWrite);
 			printf("\x0dFlash Write ... 0x%04x-%04x",addressWrite,addressWrite+BUF_SIZE-1);
 			for (ReadPt = 0;ReadPt<BUF_SIZE;ReadPt++){
-				WriteData = *(ReadData+ReadPt);
-				writeSimpleROM(addressWrite,WriteData);	//Write Data
+				SkipFlag = 0;
+				if (addressWrite == 0xffff) EndFlag = 1;
+				//Memoryed IO address (expansion slots address)
+				if ((addressWrite >= 0xffff) & (addressWrite <= 0xffff)) 	SkipFlag = 1;
+				if((SkipFlag == 0) & (EndFlag == 0)){
+					WriteData = *(ReadData+ReadPt);
+					if (addressWrite >= 0xc000){
+						writeSimpleROMpage3(addressWrite,WriteData);	//Write Data
+					}else{
+						writeSimpleROM(addressWrite,WriteData);	//Write Data
+					}
+				}
 				addressWrite ++;
 			}
 		}
