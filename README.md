@@ -141,7 +141,7 @@ ICソケットを使うとケースに入らなくなるので注意してくだ
 
 ### ■ DIP版 RevBについて
 A14 ジャンパのDefault設定が間違っています。下側のパターンをカットし、上側をショートさせてください。  
-![J_A14w](./image8.jpg "J_A14w") ![J_A14](./image9.jpg "J_A14")
+![J_A14w](./image8.jpg "J_A14w") ![J_A14](./Image9.jpg "J_A14")
 
 ## ■ カードリッジシェルについて
 推奨はRGRさんのTransparent Cartridge Shell for MSX Konami-styleになります。  
