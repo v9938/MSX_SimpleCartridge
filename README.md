@@ -8,13 +8,43 @@ SST社の39SF010/020/040との組み合わせで動作確認を行っていま�
 基板自体はある程度汎用で利用できる様に設計されており、設定変更で他型番のEPROMの利用が可能です。  
 
 
-なお、本基板および各パーツは、Boothにて頒布しています。  
+なお、本基板および各パーツは、家電のKENちゃんおよびBoothにて頒布しています。  (Boothは不定期に追加)  
 
+## ■ 頒布先
+### 家電のKENちゃん
+●MSX用カートリッジ64K Simple ROM Cartridge 【SOP版 完成品】  
+https://www.kadenken.com/view/item/000000001288  
+
+●シェルケース（廉価版）  
+- クリアブラック  
+https://www.kadenken.com/view/item/000000001497  
+- クリアブルー  
+https://www.kadenken.com/view/item/000000001498  
+- クリアピンク  
+https://www.kadenken.com/view/item/000000001500  
+- クリアオレンジ  
+https://www.kadenken.com/view/item/000000001499  
+- 白  
+https://www.kadenken.com/view/item/000000001496  
+- 黒  
+https://www.kadenken.com/view/item/000000001495  
+
+シェルケース(RGR製)
+- 透明  
+https://www.kadenken.com/view/item/000000001315  
+
+### Booth
 ●基板/パーツ/完成品  
-https://ifc.booth.pm/items/3200264
+-https://ifc.booth.pm/items/3200264
   
 ●カートリッジケース(RGR製)  
 https://ifc.booth.pm/items/3240279
+
+(2023/8/1追記)  
+Microchip社のFlashROMのDIPパーケージ品が想定以上に値上がり&入荷が不安定なため、  
+今後はSOP版 完成品のみの供給とさせていただきます。機能的な違いはありません。  
+  
+DIP版が必要な場合はガーバーファイルが同梱していますので、基板業者に直接注文してください。
 
 ## ■ Flashの制御方法
 Flashのコントロールアドレス2AAAhは2AAAh・コントロールアドレス5555hは5555hにマッピングされています。  
@@ -61,8 +91,23 @@ https://www.microchip.com/wwwproducts/en/SST39SF010A
 ```
 zcc +msx -create-app -subtype=msxdos -lmsxbios  main.c -o simplefw.com  
 ```
+## ■ その他のFlash書き込みプログラムについて
+HRA!氏作成のwrtsstで書き込み可能な事を確認しています。  
+上記プログラムより書き込み速度が速いです。^^;  
 
- 
+●wrtsst
+https://github.com/hra1129/MSX_MegaSCC_for_SST39SF040/tree/main/tools/wrtsst  
+
+## ■ Flashで実行してるかを調べる方法
+頒布用途で使用する場合、FlashROMのIDコードを読むことで、当カセットで実行しているか調べることが可能です。
+
+TestProgram_ROMVerの下記関数を参照してください。  
+(当該関数はROM上で実行することができないことに注意してください。)
+
+
+```
+int chkSimpleROM()
+```
 ## ■ 頒布基板について（～RevCまで)
 本製品は安価に頒布するため端子部はハンダメッキになっています。  
 通常使用では問題は確認されていませんが、金メッキに比べると中長期的な信頼製や耐久性が劣ります。
@@ -88,6 +133,14 @@ DIP版もA15ジャンパの設定変更でSOP版と同じメモリ配置にす�
 メモリマッピングはSOP版と同じメモリ配置になっています。  
   
 ガーバファイルを同梱していますので量産や仕様変更をされたい場合に利用ください。  
+
+## ■ 頒布基板について（紫 基板SOP版)
+金メッキ仕上げ品に変更しています。上記問題はありません。 
+![SOPPCB](./image12.jpg "SOPPCB")
+
+動作確認用にROM IDを確認するソフトが書き込みしてあります。  
+初回のみ"e"キーを押して内部のデータを消去してから使用してください。
+![TESTDONE](./image11.jpg "TestDone")
 
 ## ■ ジャンパ設定について
 組み立てキットの「DIP版」にはいくつかのジャンパが用意されています。  
@@ -144,10 +197,12 @@ A14 ジャンパのDefault設定が間違っています。下側のパターン
 ![J_A14w](./image8.jpg "J_A14w") ![J_A14](./Image9.jpg "J_A14")
 
 ## ■ カードリッジシェルについて
-推奨はRGRさんのTransparent Cartridge Shell for MSX Konami-styleになります。  
+コナミおよびASCIIタイプのシェルに合わせたネジ穴が空けてあります。  
+
+推奨シェルはRGRさんのTransparent Cartridge Shell for MSX Konami-styleになります。  
 https://retrogamerestore.com/store/msx_cart_shell/  
   
-Boothや委託先でも購入が可能です。
+Boothや販売委託先でも購入が可能です。
 輸入と製造都合で若干の小傷がある場合があります。あらかじめご了承ください。  
 国内で購入された場合はRGRさんの付属のネジはちょっとネジ穴を壊しやすいので、当方で用意した樹脂製品向けネジが付属します。  
 長さが長い方のネジを使用されることを推奨します。
