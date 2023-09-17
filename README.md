@@ -199,7 +199,22 @@ A14 ジャンパのDefault設定が間違っています。下側のパターン
 ## ■ カードリッジシェルについて
 コナミおよびASCIIタイプのシェルに合わせたネジ穴が空けてあります。  
 
-推奨シェルはRGRさんのTransparent Cartridge Shell for MSX Konami-styleになります。  
+### 3Dプリント用データ
+3Dプリント用のSLTデータを同梱しています。
+
+ネジは2mm x 10mmのタッピングビスを使ってください。  
+サンコータイト（＋）Ｐタイプナベに合わせて設計しています。  
+
+JLC PCBさんの3Dプリント Shareデータに登録してあります。  
+SLA印刷 8111X Resin/Black Resinで寸法調整しています。  
+
+下記URLから注文可能です。  
+https://3d.jlcpcb.com/3d-models/detail/MX1901-MSX-Cartridge-shell-(KOMAMI-Type)
+
+
+![shell1](./image14.jpg "shell1")![shell2](./image13.jpg "shell2")
+### 成形品のシェル  
+RGRさんのTransparent Cartridge Shell for MSX Konami-styleに対応しています。  
 https://retrogamerestore.com/store/msx_cart_shell/  
   
 Boothや販売委託先でも購入が可能です。
