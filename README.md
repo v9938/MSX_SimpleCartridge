@@ -33,12 +33,18 @@ https://www.kadenken.com/view/item/000000001495
 - 透明  
 https://www.kadenken.com/view/item/000000001315  
 
+
 ### Booth
 ●基板/パーツ/完成品  
 -https://ifc.booth.pm/items/3200264
   
 ●カートリッジケース(RGR製)  
 https://ifc.booth.pm/items/3240279
+
+
+### JLCPCB
+●シェルケース（3Dプリント）  
+https://3d.jlcpcb.com/3d-models/detail/MX1901-MSX-Cartridge-shell-(KOMAMI-Type)
 
 (2023/8/1追記)  
 Microchip社のFlashROMのDIPパーケージ品が想定以上に値上がり&入荷が不安定なため、  
@@ -200,12 +206,11 @@ A14 ジャンパのDefault設定が間違っています。下側のパターン
 コナミおよびASCIIタイプのシェルに合わせたネジ穴が空けてあります。  
 
 ### 3Dプリント用データ
-3Dプリント用のSLTデータを同梱しています。
-
-ネジは2mm x 10mmのタッピングビスを使ってください。  
+3Dプリント用のSLTデータを同梱しています。  
+固定ネジは2mm x 10mmのタッピングビスを使ってください。  
 サンコータイト（＋）Ｐタイプナベに合わせて設計しています。  
 
-JLC PCBさんの3Dプリント Shareデータに登録してあります。  
+JLC PCBさんの3Dプリント Shareデータに登録してあります。材質によりますが、価格は＄4～10ぐらい  
 SLA印刷 8111X Resin/Black Resinで寸法調整しています。  
 
 下記URLから注文可能です。  
